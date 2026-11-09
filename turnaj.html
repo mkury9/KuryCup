@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detail turnaje – KuryCup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="bg-glow"></div><div class="grid-overlay"></div>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><div class="logo-mark">KC</div><div class="logo-text">Kury<span>Cup</span></div></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Domů</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="turnaje.html">Turnaje</a></li>
+      <li><a href="galerie.html">Galerie</a></li>
+      <li><a href="prispevky.html">Příspěvky</a></li>
+      <li><a href="merch.html">Merch</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button data-cart-open class="btn btn-outline btn-sm">🛒 Košík <span data-cart-count style="display:none;background:var(--accent);color:#fff;border-radius:999px;padding:1px 7px;font-size:11px;margin-left:4px"></span></button>
+      <a href="turnaje.html" class="nav-cta">Přihlásit tým</a>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Domů</a><a href="o-nas.html">O nás</a><a href="turnaje.html">Turnaje</a><a href="galerie.html">Galerie</a><a href="prispevky.html">Příspěvky</a><a href="merch.html">Merch</a>
+</div>
+
+<section class="section container" id="detailRoot"></section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><a href="index.html" class="logo" style="margin-bottom:14px"><div class="logo-mark">KC</div><div class="logo-text">Kury<span>Cup</span></div></a><p style="color:var(--muted);font-size:14px;max-width:320px">Organizátor hokejových turnajů pro týmy a fanoušky po celé ČR.</p></div>
+      <div><h4>Stránky</h4><a href="o-nas.html">O nás</a><a href="turnaje.html">Turnaje</a><a href="galerie.html">Galerie</a><a href="prispevky.html">Příspěvky</a></div>
+      <div><h4>Merch</h4><a href="merch.html">E-shop</a><a href="merch.html?cat=Oblečení">Oblečení</a><a href="merch.html?cat=Doplňky">Doplňky</a></div>
+      <div><h4>Kontakt</h4><a href="mailto:info@kury-cup.cz">info@kury-cup.cz</a><a href="#">+420 777 123 456</a><a href="#">Liberec, ČR</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 KuryCup. Všechna práva vyhrazena.</span><span>Vytvořeno s láskou k hokeji 🏒</span></div>
+  </div>
+</footer>
+<div class="cart-overlay"></div>
+<div class="cart-drawer"><div class="cart-head"><h3>Košík</h3><button data-cart-close>×</button></div><div class="cart-items"></div><div class="cart-foot"><div class="cart-total"><span>Celkem</span><span>0 Kč</span></div><button class="btn btn-primary" style="width:100%" onclick="toast('Objednávka odeslána (demo)')">Pokračovat k pokladně</button></div></div>
+<div class="toast"></div>
+<script src="js/data.js"></script>
+<script>
+  (function(){
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    const t = window.KC.tournaments.find(x=>x.id===id) || window.KC.tournaments[0];
+    const regs = window.KC.registrations.filter(r=>r.tournamentId===t.id);
+    const root = document.getElementById('detailRoot');
+    root.innerHTML = `
+      <div class="detail-hero">
+        <a href="turnaje.html" class="btn btn-ghost btn-sm" style="padding-left:0;margin-bottom:16px">← Zpět na turnaje</a>
+        <div class="hero-grid" style="align-items:start">
+          <div>
+            <span class="badge ${t.status==='upcoming'?'badge-upcoming':'badge-past'}">${t.status==='upcoming'?'Nadchází':'Proběhlo'}</span>
+            <h1 style="font-family:'Montserrat',sans-serif;font-size:clamp(30px,4.5vw,52px);font-weight:800;letter-spacing:-1px;margin:14px 0 10px">${t.title}</h1>
+            <p style="color:var(--muted);font-size:17px;max-width:620px;margin-bottom:20px">${t.desc}</p>
+            <div class="detail-card">
+              <ul class="detail-list">
+                <li><span>Datum</span><span>${t.dateLabel}${t.endDate&&t.endDate!==t.date?' – '+new Date(t.endDate).toLocaleDateString('cs-CZ'):''}</span></li>
+                <li><span>Místo</span><span>${t.place}</span></li>
+                <li><span>Počet týmů</span><span>${t.teams}</span></li>
+                <li><span>Startovné</span><span>${t.price.toLocaleString('cs-CZ')} Kč / tým</span></li>
+                <li><span>Ceny</span><span>${t.prize}</span></li>
+                <li><span>Formát</span><span>4+1, skupiny + play-off</span></li>
+                ${t.winner?`<li><span>Vítěz</span><span style="color:var(--gold)">${t.winner}</span></li>`:''}
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div style="border-radius:20px;overflow:hidden;border:1px solid var(--border);height:320px">
+              <img src="${t.img}" alt="${t.title}" style="width:100%;height:100%;object-fit:cover">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      ${t.status==='upcoming' ? `
+      <div id="prihlaska" style="margin-top:40px">
+        <div class="section-title"><div class="eyebrow">Registrace</div><h2>Přihlášení týmu na turnaj</h2><p>Vyplňte formulář a odešlete přihlášku. Kapacita je omezená.</p></div>
+        <div class="grid grid-2">
+          <div class="detail-card">
+            <form class="form" id="regForm">
+              <input type="hidden" name="tournamentId" value="${t.id}">
+              <div class="form-row">
+                <div class="field"><label>Název týmu *</label><input required name="team" placeholder="Např. Black Ice"></div>
+                <div class="field"><label>Kapitán *</label><input required name="captain" placeholder="Jméno a příjmení"></div>
+              </div>
+              <div class="form-row">
+                <div class="field"><label>E-mail *</label><input required type="email" name="email" placeholder="kapitan@tym.cz"></div>
+                <div class="field"><label>Telefon *</label><input required name="phone" placeholder="+420 ..."></div>
+              </div>
+              <div class="form-row">
+                <div class="field"><label>Počet hráčů</label><input type="number" name="players" min="5" max="20" value="10"></div>
+                <div class="field"><label>Úroveň týmu</label><select name="level"><option>Amatérská</option><option>Poloprofesionální</option><option>Rekreační</option></select></div>
+              </div>
+              <div class="field"><label>Poznámka</label><textarea name="note" placeholder="Doplňující informace..."></textarea></div>
+              <button type="submit" class="btn btn-primary" style="justify-self:start">Odeslat přihlášku</button>
+            </form>
+          </div>
+          <div class="detail-card">
+            <h3 style="font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;margin-bottom:12px">Přihlášené týmy (${regs.length}/${t.teams})</h3>
+            <div id="regsList">
+              ${regs.length? regs.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span>${r.team}</span><span style="color:var(--muted);font-size:12px">${r.level||''}</span></div>`).join('') : '<div class="empty">Zatím žádné přihlášky. Buďte první!</div>'}
+            </div>
+            <div class="kpi-row">
+              <div class="kpi"><strong>${t.teams - regs.length}</strong><span>Volných míst</span></div>
+              <div class="kpi"><strong>${regs.length}</strong><span>Přihlášených</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      ` : `
+      <div style="margin-top:40px">
+        <div class="section-title"><div class="eyebrow">Výsledky</div><h2>Turnaj proběhl</h2><p>Vítězem se stal tým ${t.winner||'—'}. Děkujeme všem účastníkům.</p></div>
+        <div class="detail-card"><p style="color:var(--muted)">Detailní výsledky a statistiky budou doplněny. Sledujte fotogalerii a příspěvky.</p><a href="galerie.html" class="btn btn-outline btn-sm" style="margin-top:12px">Fotogalerie</a></div>
+      </div>
+      `}
+    `;
+
+    const form = document.getElementById('regForm');
+    if(form){
+      form.addEventListener('submit',e=>{
+        e.preventDefault();
+        const fd = new FormData(form);
+        const reg = {
+          id: 'r'+Date.now(),
+          tournamentId: t.id,
+          team: fd.get('team'),
+          captain: fd.get('captain'),
+          email: fd.get('email'),
+          phone: fd.get('phone'),
+          players: fd.get('players'),
+          level: fd.get('level'),
+          note: fd.get('note'),
+          date: new Date().toISOString(),
+        };
+        window.KC.registrations.push(reg);
+        window.KC.saveRegs();
+        toast('Přihláška odeslána! Ozveme se vám.');
+        // refresh list
+        setTimeout(()=>location.reload(),900);
+      });
+    }
+  })();
+</script>
+<script src="js/main.js"></script>
+</body>
+</html>
