@@ -23,4 +23,11 @@ Poté otevřete `http://localhost:8080`.
 - `js/data.js` – data (turnaje, příspěvky, produkty)
 - `js/main.js` – sdílená logika (navigace, košík, lightbox)
 
-Přihlášky týmů a košík jsou ukládány do `localStorage` (demo).
+Přihlášky týmů, objednávky, obsah webu a notifikace jsou ukládány do `localStorage` (demo).
+
+## Administrace
+
+- URL: `/admin.html`
+- Demo přístup: `admin` / `kury2026`
+- Správa turnajů, příspěvků, merch, přihlášek, objednávek a notifikací.
+- Notifikace: při přihlášení týmu a objednávce se vytvoří záznam v logu; odeslání přes e-mail/SMS link (mailto/sms) v administraci nebo při checkoutu.

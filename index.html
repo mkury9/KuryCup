@@ -28,6 +28,8 @@
       <li><a href="galerie.html">Galerie</a></li>
       <li><a href="prispevky.html">Příspěvky</a></li>
       <li><a href="merch.html">Merch</a></li>
+      <li><a href="sponzorstvi.html">Sponzorství</a></li>
+      <li><a href="admin.html">Admin</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:10px">
       <button data-cart-open class="btn btn-outline btn-sm" style="position:relative">
@@ -39,12 +41,7 @@
   </div>
 </nav>
 <div class="mobile-menu">
-  <a href="index.html">Domů</a>
-  <a href="o-nas.html">O nás</a>
-  <a href="turnaje.html">Turnaje</a>
-  <a href="galerie.html">Galerie</a>
-  <a href="prispevky.html">Příspěvky</a>
-  <a href="merch.html">Merch</a>
+  <a href="index.html">Domů</a><a href="o-nas.html">O nás</a><a href="turnaje.html">Turnaje</a><a href="galerie.html">Galerie</a><a href="prispevky.html">Příspěvky</a><a href="merch.html">Merch</a><a href="sponzorstvi.html">Sponzorství</a><a href="admin.html">Admin</a>
 </div>
 
 <!-- HERO -->
@@ -173,6 +170,8 @@
         <a href="turnaje.html">Turnaje</a>
         <a href="galerie.html">Galerie</a>
         <a href="prispevky.html">Příspěvky</a>
+        <a href="sponzorstvi.html">Sponzorství</a>
+        <a href="admin.html">Administrace</a>
       </div>
       <div>
         <h4>Merch</h4>
@@ -200,7 +199,7 @@
   <div class="cart-items"></div>
   <div class="cart-foot">
     <div class="cart-total"><span>Celkem</span><span>0 Kč</span></div>
-    <button class="btn btn-primary" style="width:100%" onclick="toast('Objednávka odeslána (demo)')">Pokračovat k pokladně</button>
+    <button class="btn btn-primary" style="width:100%" onclick="checkout()">Pokračovat k pokladně</button>
   </div>
 </div>
 <div class="toast"></div>
@@ -270,3 +269,4 @@
 <script src="js/main.js"></script>
 </body>
 </html>
+

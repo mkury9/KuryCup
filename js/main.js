@@ -106,3 +106,34 @@
   // run now too
   updateCartBadge();
 })();
+
+// checkout
+window.checkout = function(){
+  if(!window.KC || !window.KC.cart || !window.KC.cart.length){ toast('Košík je prázdný'); return; }
+  const name = prompt('Jméno a příjmení:');
+  if(!name) return;
+  const email = prompt('E-mail:');
+  if(!email) return;
+  const phone = prompt('Telefon (pro SMS, volitelné):') || '';
+  const total = window.KC.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const order = { id:'O'+Date.now(), date:new Date().toLocaleString('cs-CZ'), items: window.KC.cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty})), total: total, customer:name, email:email, phone:phone };
+  window.KC.orders.push(order);
+  window.KC.saveOrders();
+  const settings = window.KC.settings || {};
+  if(settings.notifyEmail !== false){
+    window.KC.notify('email', settings.email || 'info@kury-cup.cz', 'Nová objednávka #' + order.id, 'Zákazník: ' + name + ' (' + email + '). Celkem: ' + total + ' Kč. Položky: ' + order.items.map(i=>i.name + ' x' + i.qty).join(', '));
+  }
+  window.KC.notify('email', email, 'Potvrzení objednávky #' + order.id, 'Děkujeme za objednávku. Celkem: ' + total + ' Kč.');
+  if(settings.notifySms && phone){
+    window.KC.notify('sms', phone, 'KuryCup objednávka', 'Objednávka #' + order.id + ' přijata. Celkem ' + total + ' Kč.');
+  }
+  window.KC.cart = [];
+  window.KC.saveCart();
+  if(typeof updateCartBadge === 'function') updateCartBadge();
+  if(typeof renderCart === 'function') renderCart();
+  if(typeof closeCart === 'function') closeCart();
+  toast('Objednávka odeslána. Notifikace zaznamenány.');
+  if(confirm('Otevřít e-mailového klienta pro odeslání potvrzení zákazníkovi?')){
+    window.location.href = 'mailto:' + email + '?subject=' + encodeURIComponent('Potvrzení objednávky #' + order.id) + '&body=' + encodeURIComponent('Děkujeme za objednávku. Celkem: ' + total + ' Kč.');
+  }
+};
